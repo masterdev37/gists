@@ -1,0 +1,5 @@
+<form class="wpcf7-form init">
+  <p><span class="wpcf7-form-control-wrap"><input size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Ваше имя" type="text"></span></p>
+  <p><span class="wpcf7-form-control-wrap"><input size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required input-phonemask" placeholder="Ваш телефон" type="text" name="phone"></span></p>
+  <p><input class="wpcf7-form-control has-spinner wpcf7-submit" type="submit" value="Записаться на прием"><span class="wpcf7-spinner"></span></p>
+</form>
