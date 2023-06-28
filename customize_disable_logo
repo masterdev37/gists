@@ -1,0 +1,11 @@
+if ( ! function_exists( 'custom_customize_register' ) ) {
+	/**
+	 * Register basic customizer support.
+	 *
+	 * @param object $wp_customize Customizer reference.
+	 */
+	function custom_customize_register( $wp_customize ) {
+		$wp_customize->remove_control("custom_logo");
+	}
+}
+add_action( 'customize_register', 'custom_customize_register' );
