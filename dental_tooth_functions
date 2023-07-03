@@ -1,174 +1,161 @@
-/**
- * Меняем класс логотипа 
- START */
-add_filter( 'get_custom_logo', 'add_custom_logo_url' );
-function add_custom_logo_url() {
-    $custom_logo_id = get_theme_mod( 'custom_logo' );
-    $html = sprintf( '<a href="%1$s" class="header-logo" rel="home" itemprop="url">%2$s</a>',
-            esc_url( '/' ),
-            wp_get_attachment_image( $custom_logo_id, 'full', false, array(
-                'class'    => 'header-logo-img',
-            ) )
-        );
-    return $html;
-}
-/**
- * Меняем класс логотипа 
- END */
-
 
 /**
- * Отключаем редактор Gutenberg 
- START */
-if( 'disable_gutenberg' ){
-	remove_theme_support( 'core-block-patterns' ); // WP 5.5
-
-	add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
-
-	// отключим подключение базовых css стилей для блоков
-	// ВАЖНО! когда выйдут виджеты на блоках или что-то еще, эту строку нужно будет комментировать
-	remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
-
-	// Move the Privacy Policy help notice back under the title field.
-	add_action( 'admin_init', function(){
-		remove_action( 'admin_notices', [ 'WP_Privacy_Policy_Content', 'notice' ] );
-		add_action( 'edit_form_after_title', [ 'WP_Privacy_Policy_Content', 'notice' ] );
-	} );
-}
-/**
- * Отключаем редактор Gutenberg 
- END */
-
-
-/**
- * Страница Настроек 
- START */
-function hide_settings_page($query) {
-    if ( !is_admin() && !is_main_query() ) {
-        return;
-    }    
-    global $typenow;
-    if ($typenow === "page") {
-        // Replace "site-settings" with the slug of your site settings page.
-        $settings_page = get_page_by_path("options-page",NULL,"page")->ID;
-        $query->set( 'post__not_in', array($settings_page) );    
-    }
-    return;
-
-}
-add_action('pre_get_posts', 'hide_settings_page');
-
-
-// Добавляем пункт меню в админку
-function add_site_settings_to_menu(){
-    add_menu_page( 
-		'Страница настроек', 
-		'Страница настроек', 
-		'manage_options', 
-		'post.php?post='.get_page_by_path("options-page",NULL,"page")->ID.'&action=edit', 
-		'', 
-		'dashicons-admin-tools', 
-		18);
-}
-add_action( 'admin_menu', 'add_site_settings_to_menu' );
-/**
- * Страница Настроек 
- END */
-
-
-/**
- * Отключение визуального редактора 
- START */
-function disable_content_editor()
-{
-    if (isset($_GET['post'])) {
-        $post_ID = $_GET['post'];
-    } else if (isset($_POST['post_ID'])) {
-        $post_ID = $_POST['post_ID'];
-    }
-
-    if (!isset($post_ID) || empty($post_ID)) {
-        return;
-    }
-
-    /*
-     * Отключить возможность редактирования для страниц с ID 18, 47 и 190 (для случаев, когда нужно отключить редактор сразу для нескольких страниц)
-     */
-    $disabled_IDs = array(18,47,190);
-    if (in_array($post_ID, $disabled_IDs)) {
-        remove_post_type_support('page', 'editor');
-    }
-}
-
-add_action('admin_init', 'disable_content_editor');
-/**
- * Отключение визуального редактора 
- END */
-
-
-
-/**
- * Регистрируем post type Специалисты
- START */
-add_action( 'init', 'register_post_types' );
-
-function register_post_types() {
-
-	register_post_type( 'specialists', [
-		'label'  => null,
-		'labels' => [
-			'name'               => 'Специалисты',
-			'singular_name'      => 'Специалист',
-			'add_new'            => 'Добавить специалиста',
-			'add_new_item'       => 'Добавление специалиста',
-			'edit_item'          => 'Редактирование специалиста',
-			'new_item'           => 'Новый специалист',
-			'view_item'          => 'Смотреть специалиста',
-			'search_items'       => 'Искать специалиста',
-			'not_found'          => 'Не найдено',
-			'not_found_in_trash' => 'Не найдено в корзине',
-			'parent_item_colon'  => '',
-			'menu_name'          => 'Наши специалисты',
-		],
-		'description'            => '',
-		'public'                 => true,
-		'show_in_menu'           => true,
-		'menu_icon'           => 'dashicons-groups',
-		'hierarchical'        => false,
-		'supports'            => [ 'title', 'thumbnail' ], // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
-		'has_archive'         => false,
-		'rewrite'             => true,
-		'query_var'           => true,
-	] );
-
-}
-/**
- * Регистрируем post type Специалисты
- END */
-
-
-/**
- * Меняем местами сообщение комментария
- START */
-function bottom_commentfield( $fields ) {
-	$comment_field = $fields['comment'];
-	unset( $fields['comment'] );
-	$fields['comment'] = $comment_field;
-	return $fields;
-}
-add_filter( 'comment_form_fields', 'bottom_commentfield' );
-/**
- * Меняем местами сообщение комментария
- END */
-
-
-/**
- * Скрываем admin bar который отображается сверху экрана
- START */
-add_action('after_setup_theme', 'remove_admin_bar');
-function remove_admin_bar() {
-	show_admin_bar(false);
-}
-/**
- * Скрываем admin bar который отображается сверху экрана
- END */
+ * Меняем класс логотипа START */
+ add_filter( 'get_custom_logo', 'add_custom_logo_url' );
+ function add_custom_logo_url() {
+	 $custom_logo_id = get_theme_mod( 'custom_logo' );
+	 $html = sprintf( '<a href="%1$s" class="header-logo" rel="home" itemprop="url">%2$s</a>',
+			 esc_url( '/' ),
+			 wp_get_attachment_image( $custom_logo_id, 'full', false, array(
+				 'class'    => 'header-logo-img',
+			 ) )
+		 );
+	 return $html;
+ }
+ /**
+  * Меняем класс логотипа END */
+ 
+ 
+ /**
+  * Отключаем редактор Gutenberg START */
+ if( 'disable_gutenberg' ){
+	 remove_theme_support( 'core-block-patterns' ); // WP 5.5
+ 
+	 add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
+ 
+	 // отключим подключение базовых css стилей для блоков
+	 // ВАЖНО! когда выйдут виджеты на блоках или что-то еще, эту строку нужно будет комментировать
+	 remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
+ 
+	 // Move the Privacy Policy help notice back under the title field.
+	 add_action( 'admin_init', function(){
+		 remove_action( 'admin_notices', [ 'WP_Privacy_Policy_Content', 'notice' ] );
+		 add_action( 'edit_form_after_title', [ 'WP_Privacy_Policy_Content', 'notice' ] );
+	 } );
+ }
+ /**
+  * Отключаем редактор Gutenberg END */
+ 
+ 
+ /**
+  * Страница Настроек START */
+ function hide_settings_page($query) {
+	 if ( !is_admin() && !is_main_query() ) {
+		 return;
+	 }    
+	 global $typenow;
+	 if ($typenow === "page") {
+		 // Replace "site-settings" with the slug of your site settings page.
+		 $settings_page = get_page_by_path("options-page",NULL,"page")->ID;
+		 $query->set( 'post__not_in', array($settings_page) );    
+	 }
+	 return;
+ 
+ }
+ add_action('pre_get_posts', 'hide_settings_page');
+ 
+ 
+ // Добавляем пункт меню в админку
+ function add_site_settings_to_menu(){
+	 add_menu_page( 
+		 'Страница настроек', 
+		 'Страница настроек', 
+		 'manage_options', 
+		 'post.php?post='.get_page_by_path("options-page",NULL,"page")->ID.'&action=edit', 
+		 '', 
+		 'dashicons-admin-tools', 
+		 18);
+ }
+ add_action( 'admin_menu', 'add_site_settings_to_menu' );
+ /**
+  * Страница Настроек END */
+ 
+ 
+ /**
+  * Отключение визуального редактора START */
+ function disable_content_editor()
+ {
+	 if (isset($_GET['post'])) {
+		 $post_ID = $_GET['post'];
+	 } else if (isset($_POST['post_ID'])) {
+		 $post_ID = $_POST['post_ID'];
+	 }
+ 
+	 if (!isset($post_ID) || empty($post_ID)) {
+		 return;
+	 }
+ 
+	 /*
+	  * Отключить возможность редактирования для страниц с ID 18, 47 и 190 (для случаев, когда нужно отключить редактор сразу для нескольких страниц)
+	  */
+	 $disabled_IDs = array(18,47,190);
+	 if (in_array($post_ID, $disabled_IDs)) {
+		 remove_post_type_support('page', 'editor');
+	 }
+ }
+ 
+ add_action('admin_init', 'disable_content_editor');
+ /**
+  * Отключение визуального редактора END */
+ 
+ 
+ 
+ /**
+  * Регистрируем post type Специалисты START */
+ add_action( 'init', 'register_post_types' );
+ 
+ function register_post_types() {
+ 
+	 register_post_type( 'specialists', [
+		 'label'  => null,
+		 'labels' => [
+			 'name'               => 'Специалисты',
+			 'singular_name'      => 'Специалист',
+			 'add_new'            => 'Добавить специалиста',
+			 'add_new_item'       => 'Добавление специалиста',
+			 'edit_item'          => 'Редактирование специалиста',
+			 'new_item'           => 'Новый специалист',
+			 'view_item'          => 'Смотреть специалиста',
+			 'search_items'       => 'Искать специалиста',
+			 'not_found'          => 'Не найдено',
+			 'not_found_in_trash' => 'Не найдено в корзине',
+			 'parent_item_colon'  => '',
+			 'menu_name'          => 'Наши специалисты',
+		 ],
+		 'description'            => '',
+		 'public'                 => true,
+		 'show_in_menu'           => true,
+		 'menu_icon'           => 'dashicons-groups',
+		 'hierarchical'        => false,
+		 'supports'            => [ 'title', 'thumbnail' ], // 'title','editor','author','thumbnail','excerpt','trackbacks','custom-fields','comments','revisions','page-attributes','post-formats'
+		 'has_archive'         => false,
+		 'rewrite'             => true,
+		 'query_var'           => true,
+	 ] );
+ 
+ }
+ /**
+  * Регистрируем post type Специалисты END */
+ 
+ 
+ /**
+  * Меняем местами сообщение комментария START */
+ function bottom_commentfield( $fields ) {
+	 $comment_field = $fields['comment'];
+	 unset( $fields['comment'] );
+	 $fields['comment'] = $comment_field;
+	 return $fields;
+ }
+ add_filter( 'comment_form_fields', 'bottom_commentfield' );
+ /**
+  * Меняем местами сообщение комментария END */
+ 
+ 
+ /**
+  * Скрываем admin bar который отображается сверху экрана START */
+ add_action('after_setup_theme', 'remove_admin_bar');
+ function remove_admin_bar() {
+	 show_admin_bar(false);
+ }
+ /**
+  * Скрываем admin bar который отображается сверху экрана END */
