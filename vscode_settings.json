@@ -11,6 +11,7 @@
     "editor.hover.enabled": false,
     "editor.lineHeight": 22,
     "explorer.confirmDelete": false,
+    "explorer.autoReveal": false,
     "security.workspace.trust.enabled": false,
     "editor.insertSpaces": false,
     "editor.linkedEditing": true,
@@ -18,5 +19,7 @@
     "editor.wordWrap": "on",
     "files.associations": {
         "*.twig": "php"
-    }
+    },
+    "php.validate.executablePath": "C:/OSPanel/modules/php/PHP_7.2/php.exe",
+    "explorer.compactFolders": false
 }
