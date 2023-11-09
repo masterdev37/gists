@@ -159,3 +159,16 @@
  }
  /**
   * Скрываем admin bar который отображается сверху экрана END */
+
+
+/** Разрешить загрузки svg doc файлов START */
+function additional_mime_types($mimes)
+{
+	// новые MIME-типы, которые нужно разрешить
+	$mimes['svg'] = 'text/svg';
+	$mimes['doc']  = 'application/msword';
+
+	return $mimes;
+}
+add_filter('upload_mimes', 'additional_mime_types');
+/** Разрешить загрузки svg doc файлов END */
